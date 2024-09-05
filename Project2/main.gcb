@@ -1,0 +1,43 @@
+'''GCBASIC Program.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''Description:  [todo]
+'''
+'''@author     [todo]
+'''@licence    GPL
+'''@version    [todo]
+'''@date       [todo]
+'''********************************************************************************
+
+
+
+#include <srf04.h>
+#option Explicit
+#chip 18f4550
+#define hi2c_baud_rate 400
+#define hi2c_data portb.0
+#define hi2c_clock portb.1
+dir hi2c_data in 
+dir hi2c_clock in
+
+hi2cmode Master
+
+#define lcd_io 10
+#define lcd_i2c_address_1 0x4e
+#define lcd_speed Fast
+#define lcd_width 20
+
+#define US1Ping PORTC.7
+#define US1Echo PORTC.6
+
+Dim Distance As word
+
+
+; ----- Main body of program commences here.
+
+  Do Forever
+    Distance = USDistance(1)
+
+    cls
+    print Distance
+    Wait 250 ms
+  Loop

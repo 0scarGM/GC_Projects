@@ -1,0 +1,77 @@
+'''GCBASIC Program.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''Description:  [todo]
+'''
+'''@author     [todo]
+'''@licence    GPL
+'''@version    [todo]
+'''@date       [todo]
+'''********************************************************************************
+
+'''----- Includes
+
+
+
+
+'''----- Configuration
+#option Explicit
+#chip 18f4550
+#define hi2c_baud_rate 400
+#define hi2c_data portb.0
+#define hi2c_clock portb.1
+dir hi2c_data in 
+dir hi2c_clock in
+
+hi2cmode Master
+
+#define lcd_io 10
+#define lcd_i2c_address_1 0x4e
+#define lcd_speed Fast
+#define lcd_width 20
+
+
+'''----- Define Hardware settings
+
+
+
+
+'''----- Variables
+dim num as Byte
+
+
+
+'''----- Interrupts
+
+
+
+
+'''----- Main body of program
+
+
+do Forever
+    cls
+    num += 1
+    print num
+    portb.4 = 1
+    wait 1 s
+    portb.4 = 0
+    wait 1 s
+    LCDBacklight On
+    portb.5 = 1
+    wait 1 s
+    portb.5 = 0
+
+    wait 1 s
+    LCDBacklight off
+loop
+
+
+'''----- Subroutines
+
+
+
+
+'''----- Lookup Tables
+
+
+

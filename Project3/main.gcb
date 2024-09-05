@@ -1,0 +1,80 @@
+'''GCBASIC Program.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''Description:  [todo]
+'''
+'''@author     [todo]
+'''@licence    GPL
+'''@version    [todo]
+'''@date       [todo]
+'''********************************************************************************
+#option Explicit
+#chip 18f4550, 8
+#define hi2c_baud_rate 400
+#define hi2c_data portb.0
+#define hi2c_clock portb.1
+dir hi2c_data in 
+dir hi2c_clock in
+
+hi2cmode Master
+
+#define lcd_io 10
+#define lcd_i2c_address_1 0x4e
+#define lcd_speed Fast
+#define lcd_width 16
+
+#define echo portc.6
+#define trig portc.7
+dir echo in
+dir trig out
+trig = 0
+
+dim error as Bit
+error = 0
+dim i as word
+i = 0
+
+cls
+print "Cargando ..." 
+
+
+Do Forever
+// tri:
+//     trig = 1
+//     wait 100 ms
+//     trig = 0
+//     wait 100 ms
+//     goto tri
+    
+
+trig = 1
+wait 10 us
+trig = 0
+do until echo = 1
+nop
+loop
+    do until echo = 0 | error = 1
+        wait 100 us
+        i++
+        if i = 1000 then
+            error = 1
+        end if
+    loop
+    trig = 1
+
+    if error <> 1 then
+        cls
+        print "Tiempo: " 
+        print i
+    
+    Else 
+        cls
+        print "Error, algo esta mal."
+        cls
+        
+    end if
+    error = 0
+    i=0
+    wait 250 ms
+Loop
+
+
