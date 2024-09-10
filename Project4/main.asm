@@ -9,12 +9,12 @@
 ;   evanvennn at users dot sourceforge dot net
 ;********************************************************************************
 ;   Installation Dir : C:\GCstudio\gcbasic
-;   Source file      : C:\repos\GC_Projects\Project2\main.gcb
+;   Source file      : C:\repos\GC_Projects\Project4\main.gcb
 ;   Setting file     : C:\GCstudio\gcbasic\use.ini
 ;   Preserve mode    : 0
 ;   Assembler        : GCASM
 ;   Programmer       : C:\GCstudio\gcbasic\..\PICKitPlus\PICKitCommandline.exe
-;   Output file      : C:\repos\GC_Projects\Project2\main.asm
+;   Output file      : C:\repos\GC_Projects\Project4\main.asm
 ;   Float Capability : 0
 ;********************************************************************************
 
@@ -28,55 +28,42 @@
 ;Set aside memory locations for variables
 DELAYTEMP                        EQU       0          ; 0x0
 DELAYTEMP2                       EQU       1          ; 0x1
-DISTANCE                         EQU      13          ; 0xD
-DISTANCE_H                       EQU      14          ; 0xE
-HI2CACKPOLLSTATE                 EQU      15          ; 0xF
-HI2CCURRENTMODE                  EQU      16          ; 0x10
-HI2CWAITMSSPTIMEOUT              EQU      17          ; 0x11
-I2CBYTE                          EQU      18          ; 0x12
-I2C_LCD_BYTE                     EQU      19          ; 0x13
-INITUSSENSOR                     EQU      20          ; 0x14
-LCDBYTE                          EQU      21          ; 0x15
-LCDVALUE                         EQU      22          ; 0x16
-LCDVALUETEMP                     EQU      24          ; 0x18
-LCDVALUE_H                       EQU      23          ; 0x17
-LCD_BACKLIGHT                    EQU      25          ; 0x19
-LCD_I2C_ADDRESS_CURRENT          EQU      26          ; 0x1A
-LCD_STATE                        EQU      27          ; 0x1B
-PRINTLEN                         EQU      28          ; 0x1C
-STRINGPOINTER                    EQU      29          ; 0x1D
+HI2CACKPOLLSTATE                 EQU      10          ; 0xA
+HI2CCURRENTMODE                  EQU      11          ; 0xB
+HI2CWAITMSSPTIMEOUT              EQU      12          ; 0xC
+I                                EQU      13          ; 0xD
+I2CBYTE                          EQU      14          ; 0xE
+I2C_LCD_BYTE                     EQU      15          ; 0xF
+LCDBYTE                          EQU      16          ; 0x10
+LCDVALUE                         EQU      17          ; 0x11
+LCDVALUETEMP                     EQU      18          ; 0x12
+LCD_BACKLIGHT                    EQU      19          ; 0x13
+LCD_I2C_ADDRESS_CURRENT          EQU      20          ; 0x14
+LCD_STATE                        EQU      21          ; 0x15
+PRINTLEN                         EQU      22          ; 0x16
+STRINGPOINTER                    EQU      23          ; 0x17
+SYSBITVAR0                       EQU      24          ; 0x18
+SYSBYTETEMPA                     EQU       5          ; 0x5
+SYSBYTETEMPB                     EQU       9          ; 0x9
 SYSBYTETEMPX                     EQU       0          ; 0x0
 SYSCALCTEMPA                     EQU       5          ; 0x5
 SYSCALCTEMPX                     EQU       0          ; 0x0
-SYSCALCTEMPX_H                   EQU       1          ; 0x1
 SYSDIVLOOP                       EQU       4          ; 0x4
-SYSDIVMULTA                      EQU       7          ; 0x7
-SYSDIVMULTA_H                    EQU       8          ; 0x8
-SYSDIVMULTB                      EQU      11          ; 0xB
-SYSDIVMULTB_H                    EQU      12          ; 0xC
-SYSDIVMULTX                      EQU       2          ; 0x2
-SYSDIVMULTX_H                    EQU       3          ; 0x3
-SYSLCDTEMP                       EQU      30          ; 0x1E
-SYSPRINTDATAHANDLER              EQU      31          ; 0x1F
-SYSPRINTDATAHANDLER_H            EQU      32          ; 0x20
-SYSPRINTTEMP                     EQU      33          ; 0x21
-SYSREPEATTEMP1                   EQU      34          ; 0x22
+SYSLCDTEMP                       EQU      25          ; 0x19
+SYSPRINTDATAHANDLER              EQU      26          ; 0x1A
+SYSPRINTDATAHANDLER_H            EQU      27          ; 0x1B
+SYSPRINTTEMP                     EQU      28          ; 0x1C
+SYSREPEATTEMP1                   EQU      29          ; 0x1D
 SYSSTRINGA                       EQU       7          ; 0x7
 SYSSTRINGA_H                     EQU       8          ; 0x8
 SYSSTRINGLENGTH                  EQU       6          ; 0x6
 SYSSTRINGPARAM1                  EQU    2035          ; 0x7F3
-SYSTEMP1                         EQU      35          ; 0x23
-SYSTEMP1_H                       EQU      36          ; 0x24
+SYSTEMP1                         EQU      30          ; 0x1E
+SYSTEMP2                         EQU      31          ; 0x1F
 SYSWAITTEMPMS                    EQU       2          ; 0x2
 SYSWAITTEMPMS_H                  EQU       3          ; 0x3
 SYSWAITTEMPUS                    EQU       5          ; 0x5
 SYSWAITTEMPUS_H                  EQU       6          ; 0x6
-SYSWORDTEMPA                     EQU       5          ; 0x5
-SYSWORDTEMPA_H                   EQU       6          ; 0x6
-SYSWORDTEMPB                     EQU       9          ; 0x9
-SYSWORDTEMPB_H                   EQU      10          ; 0xA
-SYSWORDTEMPX                     EQU       0          ; 0x0
-SYSWORDTEMPX_H                   EQU       1          ; 0x1
 
 ;********************************************************************************
 
@@ -108,6 +95,10 @@ BASPROGRAMSTART
 	movlw	12
 	movwf	HI2CCURRENTMODE,ACCESS
 	rcall	HI2CMODE
+	bcf	TRISC,7,ACCESS
+	bcf	LATC,7,ACCESS
+	bcf	SYSBITVAR0,0,ACCESS
+	rcall	CLS
 	lfsr	1,SYSSTRINGPARAM1
 	movlw	low StringTable1
 	movwf	TBLPTRL,ACCESS
@@ -118,10 +109,45 @@ BASPROGRAMSTART
 	movwf	SysPRINTDATAHandler,ACCESS
 	movlw	high SYSSTRINGPARAM1
 	movwf	SysPRINTDATAHandler_H,ACCESS
-	rcall	PRINT118
+	rcall	PRINT116
+	clrf	I,ACCESS
 SysDoLoop_S1
-	movff	INITUSSENSOR,DISTANCE
-	clrf	DISTANCE_H,ACCESS
+	bcf	TRISC,7,ACCESS
+	bsf	LATC,7,ACCESS
+	movlw	13
+	movwf	DELAYTEMP,ACCESS
+DelayUS1
+	decfsz	DELAYTEMP,F,ACCESS
+	bra	DelayUS1
+	bcf	LATC,7,ACCESS
+	bsf	TRISC,7,ACCESS
+SysDoLoop_S2
+	clrf	SysByteTempX,ACCESS
+	btfsc	portc,7,ACCESS
+	comf	SysByteTempX,F,ACCESS
+	movff	SysByteTempX,SysTemp1
+	clrf	SysByteTempX,ACCESS
+	btfsc	sysbitvar0,0,ACCESS
+	comf	SysByteTempX,F,ACCESS
+	movf	SysTemp1,W,ACCESS
+	iorwf	SysByteTempX,W,ACCESS
+	movwf	SysTemp2,ACCESS
+	btfsc	SysTemp2,0,ACCESS
+	bra	SysDoLoop_E2
+	movlw	34
+	movwf	DELAYTEMP,ACCESS
+DelayUS2
+	decfsz	DELAYTEMP,F,ACCESS
+	bra	DelayUS2
+	nop
+	incf	I,F,ACCESS
+	incf	I,W,ACCESS
+	btfsc	STATUS, Z,ACCESS
+	bsf	SYSBITVAR0,0,ACCESS
+	bra	SysDoLoop_S2
+SysDoLoop_E2
+	btfsc	SYSBITVAR0,0,ACCESS
+	bra	ENDIF2
 	rcall	CLS
 	lfsr	1,SYSSTRINGPARAM1
 	movlw	low StringTable2
@@ -133,27 +159,16 @@ SysDoLoop_S1
 	movwf	SysPRINTDATAHandler,ACCESS
 	movlw	high SYSSTRINGPARAM1
 	movwf	SysPRINTDATAHandler_H,ACCESS
-	rcall	PRINT118
-	movff	DISTANCE,LCDVALUE
-	movff	DISTANCE_H,LCDVALUE_H
-	rcall	PRINT120
-	lfsr	1,SYSSTRINGPARAM1
-	movlw	low StringTable3
-	movwf	TBLPTRL,ACCESS
-	movlw	high StringTable3
-	movwf	TBLPTRH,ACCESS
-	rcall	SYSREADSTRING
-	movlw	low SYSSTRINGPARAM1
-	movwf	SysPRINTDATAHandler,ACCESS
-	movlw	high SYSSTRINGPARAM1
-	movwf	SysPRINTDATAHandler_H,ACCESS
-	rcall	PRINT118
-	movlw	34
-	movwf	DELAYTEMP,ACCESS
-DelayUS1
-	decfsz	DELAYTEMP,F,ACCESS
-	bra	DelayUS1
-	nop
+	rcall	PRINT116
+	movff	I,LCDVALUE
+	rcall	PRINT117
+ENDIF2
+	bcf	SYSBITVAR0,0,ACCESS
+	clrf	I,ACCESS
+	movlw	250
+	movwf	SysWaitTempMS,ACCESS
+	clrf	SysWaitTempMS_H,ACCESS
+	rcall	Delay_MS
 	bra	SysDoLoop_S1
 SysDoLoop_E1
 BASPROGRAMEND
@@ -176,9 +191,9 @@ CLS
 	rcall	LCDNORMALWRITEBYTE
 	movlw	33
 	movwf	DELAYTEMP,ACCESS
-DelayUS2
+DelayUS3
 	decfsz	DELAYTEMP,F,ACCESS
-	bra	DelayUS2
+	bra	DelayUS3
 	return
 
 ;********************************************************************************
@@ -219,31 +234,31 @@ HI2CMODE
 	movlw	12
 	subwf	HI2CCURRENTMODE,W,ACCESS
 	btfss	STATUS, Z,ACCESS
-	bra	ENDIF23
+	bra	ENDIF21
 	bsf	SSPCON1,SSPM3,ACCESS
 	bcf	SSPCON1,SSPM2,ACCESS
 	bcf	SSPCON1,SSPM1,ACCESS
 	bcf	SSPCON1,SSPM0,ACCESS
 	movlw	4
 	movwf	SSPADD,ACCESS
-ENDIF23
+ENDIF21
 	movf	HI2CCURRENTMODE,F,ACCESS
 	btfss	STATUS, Z,ACCESS
-	bra	ENDIF24
+	bra	ENDIF22
 	bcf	SSPCON1,SSPM3,ACCESS
 	bsf	SSPCON1,SSPM2,ACCESS
 	bsf	SSPCON1,SSPM1,ACCESS
 	bcf	SSPCON1,SSPM0,ACCESS
-ENDIF24
+ENDIF22
 	movlw	3
 	subwf	HI2CCURRENTMODE,W,ACCESS
 	btfss	STATUS, Z,ACCESS
-	bra	ENDIF25
+	bra	ENDIF23
 	bcf	SSPCON1,SSPM3,ACCESS
 	bsf	SSPCON1,SSPM2,ACCESS
 	bsf	SSPCON1,SSPM1,ACCESS
 	bsf	SSPCON1,SSPM0,ACCESS
-ENDIF25
+ENDIF23
 	bsf	SSPCON1,SSPEN,ACCESS
 	return
 
@@ -256,19 +271,19 @@ RETRYHI2CSEND
 	movff	I2CBYTE,SSPBUF
 	rcall	HI2CWAITMSSP
 	btfss	SSPCON2,ACKSTAT,ACCESS
-	bra	ELSE28_1
+	bra	ELSE26_1
 	setf	HI2CACKPOLLSTATE,ACCESS
-	bra	ENDIF28
-ELSE28_1
+	bra	ENDIF26
+ELSE26_1
 	clrf	HI2CACKPOLLSTATE,ACCESS
-ENDIF28
+ENDIF26
 	btfss	SSPCON1,WCOL,ACCESS
-	bra	ENDIF29
+	bra	ENDIF27
 	movf	HI2CCURRENTMODE,W,ACCESS
 	sublw	10
 	btfsc	STATUS, C,ACCESS
 	bra	RETRYHI2CSEND
-ENDIF29
+ENDIF27
 	movf	HI2CCURRENTMODE,W,ACCESS
 	sublw	10
 	btfsc	STATUS, C,ACCESS
@@ -282,15 +297,15 @@ HI2CSTART
 	movf	HI2CCURRENTMODE,W,ACCESS
 	sublw	10
 	btfsc	STATUS, C,ACCESS
-	bra	ELSE26_1
+	bra	ELSE24_1
 	bsf	SSPCON2,SEN,ACCESS
 	rcall	HI2CWAITMSSP
-	bra	ENDIF26
-ELSE26_1
+	bra	ENDIF24
+ELSE24_1
 SysWaitLoop1
 	btfss	SSPSTAT,S,ACCESS
 	bra	SysWaitLoop1
-ENDIF26
+ENDIF24
 	return
 
 ;********************************************************************************
@@ -299,19 +314,19 @@ HI2CSTOP
 	movf	HI2CCURRENTMODE,W,ACCESS
 	sublw	10
 	btfsc	STATUS, C,ACCESS
-	bra	ELSE27_1
+	bra	ELSE25_1
 SysWaitLoop2
 	btfsc	SSPSTAT,R_NOT_W,ACCESS
 	bra	SysWaitLoop2
 	bsf	SSPCON2,PEN,ACCESS
 	bsf	SSPCON2,PEN,ACCESS
 	rcall	HI2CWAITMSSP
-	bra	ENDIF27
-ELSE27_1
+	bra	ENDIF25
+ELSE25_1
 SysWaitLoop3
 	btfss	SSPSTAT,P,ACCESS
 	bra	SysWaitLoop3
-ENDIF27
+ENDIF25
 	return
 
 ;********************************************************************************
@@ -323,17 +338,17 @@ HI2CWAITMSSPWAIT
 	movlw	255
 	subwf	HI2CWAITMSSPTIMEOUT,W,ACCESS
 	btfsc	STATUS, C,ACCESS
-	bra	ENDIF32
+	bra	ENDIF30
 	btfsc	PIR1,SSPIF,ACCESS
-	bra	ENDIF33
+	bra	ENDIF31
 	nop
 	nop
 	nop
 	nop
 	bra	HI2CWAITMSSPWAIT
-ENDIF33
+ENDIF31
 	bcf	PIR1,SSPIF,ACCESS
-ENDIF32
+ENDIF30
 	return
 
 ;********************************************************************************
@@ -523,9 +538,9 @@ ENDIF8
 	movwf	LCD_STATE,ACCESS
 	movlw	6
 	movwf	DELAYTEMP,ACCESS
-DelayUS3
+DelayUS4
 	decfsz	DELAYTEMP,F,ACCESS
-	bra	DelayUS3
+	bra	DelayUS4
 	nop
 	btfsc	SYSLCDTEMP,1,ACCESS
 	bra	ENDIF9
@@ -543,7 +558,7 @@ ENDIF9
 
 ;********************************************************************************
 
-PRINT118
+PRINT116
 	movff	SysPRINTDATAHandler,AFSR0
 	movff	SysPRINTDATAHandler_H,AFSR0_H
 	movff	INDF0,PRINTLEN
@@ -575,106 +590,44 @@ SysForLoopEnd1
 
 ;********************************************************************************
 
-PRINT120
-	bsf	SYSLCDTEMP,1,ACCESS
+PRINT117
 	clrf	LCDVALUETEMP,ACCESS
-	movff	LCDVALUE,SysWORDTempA
-	movff	LCDVALUE_H,SysWORDTempA_H
-	movlw	16
-	movwf	SysWORDTempB,ACCESS
-	movlw	39
-	movwf	SysWORDTempB_H,ACCESS
-	rcall	SYSCOMPLESSTHAN16
-	comf	SysByteTempX,F,ACCESS
-	btfss	SysByteTempX,0,ACCESS
-	bra	ENDIF4
-	movff	LCDVALUE,SysWORDTempA
-	movff	LCDVALUE_H,SysWORDTempA_H
-	movlw	16
-	movwf	SysWORDTempB,ACCESS
-	movlw	39
-	movwf	SysWORDTempB_H,ACCESS
-	rcall	SYSDIVSUB16
-	movff	SysWORDTempA,LCDVALUETEMP
-	movff	SYSCALCTEMPX,LCDVALUE
-	movff	SYSCALCTEMPX_H,LCDVALUE_H
-	movlw	48
-	addwf	LCDVALUETEMP,W,ACCESS
-	movwf	LCDBYTE,ACCESS
-	rcall	LCDNORMALWRITEBYTE
-	bra	LCDPRINTWORD1000
-ENDIF4
-	movff	LCDVALUE,SysWORDTempA
-	movff	LCDVALUE_H,SysWORDTempA_H
-	movlw	232
-	movwf	SysWORDTempB,ACCESS
-	movlw	3
-	movwf	SysWORDTempB_H,ACCESS
-	rcall	SYSCOMPLESSTHAN16
-	comf	SysByteTempX,F,ACCESS
-	btfss	SysByteTempX,0,ACCESS
-	bra	ENDIF5
-LCDPRINTWORD1000
-	movff	LCDVALUE,SysWORDTempA
-	movff	LCDVALUE_H,SysWORDTempA_H
-	movlw	232
-	movwf	SysWORDTempB,ACCESS
-	movlw	3
-	movwf	SysWORDTempB_H,ACCESS
-	rcall	SYSDIVSUB16
-	movff	SysWORDTempA,LCDVALUETEMP
-	movff	SYSCALCTEMPX,LCDVALUE
-	movff	SYSCALCTEMPX_H,LCDVALUE_H
-	movlw	48
-	addwf	LCDVALUETEMP,W,ACCESS
-	movwf	LCDBYTE,ACCESS
-	rcall	LCDNORMALWRITEBYTE
-	bra	LCDPRINTWORD100
-ENDIF5
-	movff	LCDVALUE,SysWORDTempA
-	movff	LCDVALUE_H,SysWORDTempA_H
+	bsf	SYSLCDTEMP,1,ACCESS
 	movlw	100
-	movwf	SysWORDTempB,ACCESS
-	clrf	SysWORDTempB_H,ACCESS
-	rcall	SYSCOMPLESSTHAN16
-	comf	SysByteTempX,F,ACCESS
-	btfss	SysByteTempX,0,ACCESS
+	subwf	LCDVALUE,W,ACCESS
+	btfss	STATUS, C,ACCESS
 	bra	ENDIF6
-LCDPRINTWORD100
-	movff	LCDVALUE,SysWORDTempA
-	movff	LCDVALUE_H,SysWORDTempA_H
+	movff	LCDVALUE,SysBYTETempA
 	movlw	100
-	movwf	SysWORDTempB,ACCESS
-	clrf	SysWORDTempB_H,ACCESS
-	rcall	SYSDIVSUB16
-	movff	SysWORDTempA,LCDVALUETEMP
+	movwf	SysBYTETempB,ACCESS
+	rcall	SYSDIVSUB
+	movff	SysBYTETempA,LCDVALUETEMP
 	movff	SYSCALCTEMPX,LCDVALUE
-	movff	SYSCALCTEMPX_H,LCDVALUE_H
 	movlw	48
 	addwf	LCDVALUETEMP,W,ACCESS
 	movwf	LCDBYTE,ACCESS
 	rcall	LCDNORMALWRITEBYTE
-	bra	LCDPRINTWORD10
 ENDIF6
-	movff	LCDVALUE,SysWORDTempA
-	movff	LCDVALUE_H,SysWORDTempA_H
+	movff	LCDVALUETEMP,SysBYTETempB
+	clrf	SysBYTETempA,ACCESS
+	rcall	SYSCOMPLESSTHAN
+	movff	SysByteTempX,SysTemp1
+	movff	LCDVALUE,SysBYTETempA
 	movlw	10
-	movwf	SysWORDTempB,ACCESS
-	clrf	SysWORDTempB_H,ACCESS
-	rcall	SYSCOMPLESSTHAN16
+	movwf	SysBYTETempB,ACCESS
+	rcall	SYSCOMPLESSTHAN
 	comf	SysByteTempX,F,ACCESS
-	btfss	SysByteTempX,0,ACCESS
+	movf	SysTemp1,W,ACCESS
+	iorwf	SysByteTempX,W,ACCESS
+	movwf	SysTemp2,ACCESS
+	btfss	SysTemp2,0,ACCESS
 	bra	ENDIF7
-LCDPRINTWORD10
-	movff	LCDVALUE,SysWORDTempA
-	movff	LCDVALUE_H,SysWORDTempA_H
+	movff	LCDVALUE,SysBYTETempA
 	movlw	10
-	movwf	SysWORDTempB,ACCESS
-	clrf	SysWORDTempB_H,ACCESS
-	rcall	SYSDIVSUB16
-	movff	SysWORDTempA,LCDVALUETEMP
+	movwf	SysBYTETempB,ACCESS
+	rcall	SYSDIVSUB
+	movff	SysBYTETempA,LCDVALUETEMP
 	movff	SYSCALCTEMPX,LCDVALUE
-	movff	SYSCALCTEMPX_H,LCDVALUE_H
 	movlw	48
 	addwf	LCDVALUETEMP,W,ACCESS
 	movwf	LCDBYTE,ACCESS
@@ -687,83 +640,37 @@ ENDIF7
 
 ;********************************************************************************
 
-SYSCOMPEQUAL16
-	clrf	SYSBYTETEMPX,ACCESS
-	movf	SYSWORDTEMPB, W,ACCESS
-	cpfseq	SYSWORDTEMPA,ACCESS
-	return
-	movf	SYSWORDTEMPB_H, W,ACCESS
-	cpfseq	SYSWORDTEMPA_H,ACCESS
-	return
+SYSCOMPLESSTHAN
 	setf	SYSBYTETEMPX,ACCESS
-	return
-
-;********************************************************************************
-
-SYSCOMPLESSTHAN16
+	movf	SYSBYTETEMPB, W,ACCESS
+	cpfslt	SYSBYTETEMPA,ACCESS
 	clrf	SYSBYTETEMPX,ACCESS
-	movf	SYSWORDTEMPA_H,W,ACCESS
-	subwf	SYSWORDTEMPB_H,W,ACCESS
-	btfss	STATUS,C,ACCESS
-	return
-	movf	SYSWORDTEMPB_H,W,ACCESS
-	subwf	SYSWORDTEMPA_H,W,ACCESS
-	bnc	SCLT16TRUE
-	movf	SYSWORDTEMPB,W,ACCESS
-	subwf	SYSWORDTEMPA,W,ACCESS
-	btfsc	STATUS,C,ACCESS
-	return
-SCLT16TRUE
-	comf	SYSBYTETEMPX,F,ACCESS
 	return
 
 ;********************************************************************************
 
-SYSDIVSUB16
-	movff	SYSWORDTEMPA,SYSDIVMULTA
-	movff	SYSWORDTEMPA_H,SYSDIVMULTA_H
-	movff	SYSWORDTEMPB,SYSDIVMULTB
-	movff	SYSWORDTEMPB_H,SYSDIVMULTB_H
-	clrf	SYSDIVMULTX,ACCESS
-	clrf	SYSDIVMULTX_H,ACCESS
-	movff	SYSDIVMULTB,SysWORDTempA
-	movff	SYSDIVMULTB_H,SysWORDTempA_H
-	clrf	SysWORDTempB,ACCESS
-	clrf	SysWORDTempB_H,ACCESS
-	rcall	SYSCOMPEQUAL16
-	btfss	SysByteTempX,0,ACCESS
-	bra	ENDIF21
-	clrf	SYSWORDTEMPA,ACCESS
-	clrf	SYSWORDTEMPA_H,ACCESS
+SYSDIVSUB
+	movf	SYSBYTETEMPB, F,ACCESS
+	btfsc	STATUS, Z,ACCESS
 	return
-ENDIF21
-	movlw	16
+	clrf	SYSBYTETEMPX,ACCESS
+	movlw	8
 	movwf	SYSDIVLOOP,ACCESS
-SYSDIV16START
-	bcf	STATUS,C,ACCESS
-	rlcf	SYSDIVMULTA,F,ACCESS
-	rlcf	SYSDIVMULTA_H,F,ACCESS
-	rlcf	SYSDIVMULTX,F,ACCESS
-	rlcf	SYSDIVMULTX_H,F,ACCESS
-	movf	SYSDIVMULTB,W,ACCESS
-	subwf	SYSDIVMULTX,F,ACCESS
-	movf	SYSDIVMULTB_H,W,ACCESS
-	subwfb	SYSDIVMULTX_H,F,ACCESS
-	bsf	SYSDIVMULTA,0,ACCESS
-	btfsc	STATUS,C,ACCESS
-	bra	ENDIF22
-	bcf	SYSDIVMULTA,0,ACCESS
-	movf	SYSDIVMULTB,W,ACCESS
-	addwf	SYSDIVMULTX,F,ACCESS
-	movf	SYSDIVMULTB_H,W,ACCESS
-	addwfc	SYSDIVMULTX_H,F,ACCESS
-ENDIF22
+SYSDIV8START
+	bcf	STATUS, C,ACCESS
+	rlcf	SYSBYTETEMPA, F,ACCESS
+	rlcf	SYSBYTETEMPX, F,ACCESS
+	movf	SYSBYTETEMPB, W,ACCESS
+	subwf	SYSBYTETEMPX, F,ACCESS
+	bsf	SYSBYTETEMPA, 0,ACCESS
+	btfsc	STATUS, C,ACCESS
+	bra	DIV8NOTNEG
+	bcf	SYSBYTETEMPA, 0,ACCESS
+	movf	SYSBYTETEMPB, W,ACCESS
+	addwf	SYSBYTETEMPX, F,ACCESS
+DIV8NOTNEG
 	decfsz	SYSDIVLOOP, F,ACCESS
-	bra	SYSDIV16START
-	movff	SYSDIVMULTA,SYSWORDTEMPA
-	movff	SYSDIVMULTA_H,SYSWORDTEMPA_H
-	movff	SYSDIVMULTX,SYSWORDTEMPX
-	movff	SYSDIVMULTX_H,SYSWORDTEMPX_H
+	bra	SYSDIV8START
 	return
 
 ;********************************************************************************
@@ -798,11 +705,7 @@ StringTable1
 
 
 StringTable2
-	db	11,68,105,115,116,97,110,99,105,97,58,32
-
-
-StringTable3
-	db	2,99,109
+	db	8,84,105,101,109,112,111,58,32
 
 
 ;********************************************************************************

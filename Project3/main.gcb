@@ -2,12 +2,14 @@
 '''--------------------------------------------------------------------------------------------------------------------------------
 '''Description:  [todo]
 '''
-'''@author     [todo]
+'''@author     Osccar
 '''@licence    GPL
 '''@version    [todo]
-'''@date       [todo]
+'''@date       9/7/2024
 '''********************************************************************************
-#option Explicit
+
+//b4 y b5 gps b0 y b1 i2c por si a caso
+
 #chip 18f4550, 8
 #define hi2c_baud_rate 400
 #define hi2c_data portb.0
@@ -22,59 +24,84 @@ hi2cmode Master
 #define lcd_speed Fast
 #define lcd_width 16
 
-#define echo portc.6
-#define trig portc.7
-dir echo in
-dir trig out
-trig = 0
+#define echoT portc.6
+#define trigT portc.7
+#define echoFront porta.0
+#define trigFront porta.1
+#define echoFrontRight porta.2
+#define trigFrontRight porta.3
+#define echoFrontLeft porta.4
+#define trigFrontLeft porta.5
+#define echoBack porta.6
+#define trigBack porta.7
+#define echoBackRight porta.8
+#define trigBackRight portc.0
+#define echoBackLeft portc.1
+#define trigBackLeft portc.2
 
-dim error as Bit
-error = 0
-dim i as word
-i = 0
+dir echoT in
+dir trigT out
+dir echoFront in
+dir trigFront out
+dir echoFrontRight in
+dir trigFrontRight out
+dir echoFrontLeft in
+dir trigFrontLeft out
+dir echoBack in
+dir trigBack out
+dir echoBackRight in
+dir trigBackRight out
+dir echoBackLeft in
+dir trigBackLeft out
+
+dim front as Byte
+dim test as Byte
 
 cls
 print "Cargando ..." 
 
 
-Do Forever
-// tri:
-//     trig = 1
-//     wait 100 ms
-//     trig = 0
-//     wait 100 ms
-//     goto tri
-    
+function Measurements as byte
 
-trig = 1
-wait 10 us
-trig = 0
-do until echo = 1
-nop
-loop
-    do until echo = 0 | error = 1
-        wait 100 us
-        i++
-        if i = 1000 then
-            error = 1
+    US= 0
+    trig = 1
+    wait 10 us
+    trig = 0
+    do until echo = 1 | timeOut = 1
+        wait 1 ms 
+        USSensor++
+        if USSensor = 100 then
+            timeOut = 1
+            USSensor = 255
+        end if
+        nop
+    loop
+ 
+    USSensor=0 
+
+    do until echo = 0 | timeOut = 1
+        wait 56 us
+        USSensor++
+        if USSensor = 255 then
+            timeOut = 1
         end if
     loop
-    trig = 1
 
-    if error <> 1 then
-        cls
-        print "Tiempo: " 
-        print i
-    
-    Else 
-        cls
-        print "Error, algo esta mal."
-        cls
-        
+    trig=1
+
+    if timeOut=1 then
+        USSensor=255
     end if
-    error = 0
-    i=0
+
+End sub
+
+do Forever
+
+    Distance(trigT,echoT,test)
+    cls
+    print "Distancia: "
+    print test
+    print "cm"
     wait 250 ms
-Loop
 
-
+loop

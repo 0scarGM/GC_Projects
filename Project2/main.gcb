@@ -31,13 +31,15 @@ hi2cmode Master
 
 Dim Distance As word
 
-
+print "Cargando ..."
 ; ----- Main body of program commences here.
 
   Do Forever
-    Distance = USDistance(1)
+    Distance =USDistance(1)
 
     cls
+    print "Distancia: "
     print Distance
-    Wait 250 ms
+    print "cm"
+    Wait 52 us
   Loop
