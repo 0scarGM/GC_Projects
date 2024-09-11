@@ -1,0 +1,63 @@
+'''GCBASIC Program.
+'''--------------------------------------------------------------------------------------------------------------------------------
+'''Description:  [todo]
+'''
+'''@author     [todo]
+'''@licence    GPL
+'''@version    [todo]
+'''@date       [todo]
+'''********************************************************************************
+#include <nexus.h>
+
+
+#chip 18F45K50, 32
+
+// #define USART_BAUD_RATE 9600
+// #define USART_TX_BLOCKING
+// #define USART_BLOCKING
+// #define USART_DELAY off
+
+// Dim myNum as Word
+// myNum = 1
+
+// do Forever
+// HSerPrint "hola", 1
+// HSerPrintCRLF
+// wait 250 ms
+// loop
+
+
+// Do forever 
+//     HSerPrint myNum            
+//     wait 250 ms
+//     myNum++
+// loop
+
+'''----- Define Hardware settings
+#define ECM_K
+
+
+
+
+'''I2C Bus
+#define HI2C_BAUD_RATE 400
+Dir HI2C_DATA in
+Dir HI2C_CLOCK in
+HI2CMode Master
+
+'''LCD Display for debuging
+#define LCD_IO 10
+#define LCD_I2C_Address_1 0x4E '0x7E 0x4E
+#define LCD_SPEED OPTIMAL
+#define LCD_WIDTH 16
+#define LCD_Backlight_On_State  1
+#define LCD_Backlight_Off_State 0
+
+
+
+
+do Forever
+cls
+print "hola"
+wait 250 ms
+loop
